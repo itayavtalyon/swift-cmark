@@ -241,7 +241,11 @@ static int S_render_node(cmark_html_renderer *renderer, cmark_node *node,
       } else {
         cmark_strbuf_puts(html, "<pre");
         cmark_html_render_sourcepos(node, html, options);
-        cmark_strbuf_puts(html, "><code class=\"language-");
+        cmark_strbuf_puts(html, "><code class=\"");
+        if (first_tag < 9 ||
+            memcmp(node->as.code.info.data, "language-", 9) != 0) {
+          cmark_strbuf_puts(html, "language-");
+        }
         escape_html(html, node->as.code.info.data, first_tag);
         if (first_tag < node->as.code.info.len && (options & CMARK_OPT_FULL_INFO_STRING)) {
           cmark_strbuf_puts(html, "\" data-meta=\"");
