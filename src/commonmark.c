@@ -37,7 +37,8 @@ static inline void outc(cmark_renderer *renderer, cmark_node *node,
       ((escape == NORMAL &&
         (c < 0x20 ||
 	 c == '*' || c == '_' || c == '[' || c == ']' || c == '#' || c == '<' ||
-         c == '>' || c == '\\' || c == '`' || c == '~' || c == '!' ||
+         c == '>' || c == '\\' || c == '`' || c == '~' ||
+         (c == '!' && (!nextc || nextc == '[')) ||
          (c == '&' && cmark_isalpha(nextc)) || (c == '!' && nextc == '[') ||
          (c == '^' && nextc == '[') ||
 	 ((CMARK_OPT_SMART & options) &&

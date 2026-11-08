@@ -764,6 +764,10 @@ static void render_commonmark(test_batch_runner *runner) {
   test_md_to_commonmark(runner, "- a\n\n<!-- -->\n\n    b\n",
                         "  - a\n\n<!-- -->\n\n``` \nb\n```\n",
                         "a list before a code block needs no end marker");
+  test_md_to_commonmark(runner, "a!b hi\\![x]\n", "a!b hi\\!\\[x\\]\n",
+                        "a bang is escaped only before a bracket");
+  test_md_to_commonmark(runner, "hi!\n", "hi\\!\n",
+                        "a bang at the end of a text node is escaped");
 
   static const char smart[] = "a\\-\\-b \\.\\.\\. \\\"q\\\" it\\'s\n";
   cmark_node *smart_doc = cmark_parse_document(smart, sizeof(smart) - 1,
