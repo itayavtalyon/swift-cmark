@@ -694,6 +694,20 @@ static void render_latex(test_batch_runner *runner) {
          "render document without wrapping");
   free(latex);
   cmark_node_free(doc);
+
+  static const char ordered[] = "3. a\n4. b\n";
+  doc = cmark_parse_document(ordered, sizeof(ordered) - 1, CMARK_OPT_DEFAULT);
+  latex = cmark_render_latex(doc, CMARK_OPT_DEFAULT, 0);
+  STR_EQ(runner, latex, "\\begin{enumerate}\n"
+                        "\\setcounter{enumi}{2}\n"
+                        "\\item a\n"
+                        "\n"
+                        "\\item b\n"
+                        "\n"
+                        "\\end{enumerate}\n",
+         "render ordered list start as the counter before it");
+  free(latex);
+  cmark_node_free(doc);
 }
 
 static void render_commonmark(test_batch_runner *runner) {
