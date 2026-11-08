@@ -175,3 +175,14 @@ No ellipses\.\.\.
 .
 <p>No ellipses...</p>
 ````````````````````````````````
+
+A quote after an opening bracket or parenthesis opens, even when it is also right-flanking (commonmark.js#177):
+
+```````````````````````````````` example
+("[x]")
+
+["(x)"]
+.
+<p>(“[x]”)</p>
+<p>[“(x)”]</p>
+````````````````````````````````

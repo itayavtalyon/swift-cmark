@@ -4,7 +4,8 @@ Issue #113: EOL character weirdness on Windows
 (Important: first line ends with CR + CR + LF)
 
 ```````````````````````````````` example
-line1
+line1
+
 line2
 .
 <p>line1</p>
@@ -463,4 +464,15 @@ A task list item marker is `[`, a space, `x` or `X`, then `]`.
 <li>( ] b</li>
 <li>[y] c</li>
 </ul>
+````````````````````````````````
+
+A link destination with unbalanced unescaped parentheses is not a link (commonmark.js#177):
+
+```````````````````````````````` example
+[a](b(c "t")
+
+[a](b(c)d)
+.
+<p>[a](b(c &quot;t&quot;)</p>
+<p><a href="b(c)d">a</a></p>
 ````````````````````````````````
