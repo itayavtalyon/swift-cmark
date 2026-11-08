@@ -51,6 +51,12 @@ if(Python3_Interpreter_FOUND)
                                                          --spec "${CMAKE_CURRENT_SOURCE_DIR}/spec.txt"
                                                          --program "$<TARGET_FILE:cmark-gfm>")
 
+  add_test(NAME commonmark_spectest_executable
+           COMMAND "$<TARGET_FILE:Python3::Interpreter>" "${CMAKE_CURRENT_SOURCE_DIR}/spec_tests.py"
+                                                         --no-normalize
+                                                         --spec "${CMAKE_CURRENT_SOURCE_DIR}/commonmark-spec-0.31.2.txt"
+                                                         --program "$<TARGET_FILE:cmark-gfm>")
+
   add_test(NAME smartpuncttest_executable
            COMMAND "$<TARGET_FILE:Python3::Interpreter>" "${CMAKE_CURRENT_SOURCE_DIR}/spec_tests.py"
                                                          --no-normalize
