@@ -247,12 +247,24 @@ static int S_render_node(cmark_renderer *renderer, cmark_node *node,
         LIT(listmarker);
         renderer->begin_content = true;
       }
-      for (i = marker_width; i--;) {
-        cmark_strbuf_putc(renderer->prefix, ' ');
+      if (node->first_child == NULL) {
+        // a blank line after an empty item would loosen a tight list
+        if (node->parent->as.list.tight) {
+          CR();
+        } else {
+          BLANKLINE();
+        }
+      } else {
+        for (i = marker_width; i--;) {
+          cmark_strbuf_putc(renderer->prefix, ' ');
+        }
       }
     } else {
-      cmark_strbuf_truncate(renderer->prefix,
-                            renderer->prefix->size - marker_width);
+      // an empty item added nothing to the prefix
+      if (node->first_child != NULL) {
+        cmark_strbuf_truncate(renderer->prefix,
+                              renderer->prefix->size - marker_width);
+      }
       CR();
     }
     break;
