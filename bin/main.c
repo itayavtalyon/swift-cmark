@@ -54,6 +54,7 @@ void print_usage() {
   printf("  --sourcepos       Include source position attribute\n");
   printf("  --hardbreaks      Treat newlines as hard line breaks\n");
   printf("  --nobreaks        Render soft line breaks as spaces\n");
+  printf("  --safe            Omit raw HTML and dangerous URLs (default)\n");
   printf("  --unsafe          Render raw HTML and dangerous URLs\n");
   printf("  --smart           Use smart punctuation\n");
   printf("  --validate-utf8   Replace UTF-8 invalid sequences with U+FFFD\n");
@@ -189,6 +190,8 @@ int main(int argc, char *argv[]) {
       options |= CMARK_OPT_SMART;
     } else if (strcmp(argv[i], "--github-pre-lang") == 0) {
       options |= CMARK_OPT_GITHUB_PRE_LANG;
+    } else if (strcmp(argv[i], "--safe") == 0) {
+      options |= CMARK_OPT_SAFE;
     } else if (strcmp(argv[i], "--unsafe") == 0) {
       options |= CMARK_OPT_UNSAFE;
     } else if (strcmp(argv[i], "--validate-utf8") == 0) {
