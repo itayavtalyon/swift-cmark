@@ -487,3 +487,11 @@ A numeric character reference has at most 7 decimal or 6 hexadecimal digits, als
 <p>� &amp;#12345678; 􏿿 &amp;#x0010FFFF;</p>
 <p><a href="/u" title="&amp;#12345678;">a</a></p>
 ````````````````````````````````
+
+U+FFFE and U+FFFF are valid code points and encode as UTF-8 (commonmark/cmark#548):
+
+```````````````````````````````` example
+(&#xFFFE;&#xFFFF;)
+.
+<p>(￾￿)</p>
+````````````````````````````````
