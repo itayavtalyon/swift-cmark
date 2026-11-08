@@ -1947,8 +1947,8 @@ int cmark_inline_parser_scan_delimiters(cmark_inline_parser *parser,
     after_char = 10;
   }
 
-  *punct_before = cmark_utf8proc_is_punctuation(before_char);
-  *punct_after = cmark_utf8proc_is_punctuation(after_char);
+  *punct_before = cmark_utf8proc_is_punctuation_or_symbol(before_char);
+  *punct_after = cmark_utf8proc_is_punctuation_or_symbol(after_char);
   space_before = cmark_utf8proc_is_space(before_char) != 0;
   space_after = cmark_utf8proc_is_space(after_char) != 0;
 

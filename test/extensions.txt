@@ -532,6 +532,21 @@ No ~mismatch~~
 <p>No ~mismatch~~</p>
 ````````````````````````````````
 
+A Unicode symbol counts as punctuation for flanking, as it does for
+emphasis (CommonMark 0.31): a symbol after an opener, then before a closer.
+
+```````````````````````````````` example
+a~~€~~
+
+~~€~~a
+
+(~~€~~)
+.
+<p>a~~€~~</p>
+<p>~~€~~a</p>
+<p>(<del>€</del>)</p>
+````````````````````````````````
+
 Using 200 tilde since it overflows the internal buffer
 size (100) for parsing delimiters in inlines.c
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~striked~
