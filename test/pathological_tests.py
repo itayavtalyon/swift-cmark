@@ -99,6 +99,13 @@ pathological = {
     "many image openers":
                  ("![p"*100000 + "\n",
                   re.compile("<p>(!\[p){100000}</p>")),
+    "empty lines in deeply nested lists":
+                 ("- " * 30000 + "x" + "\n" * 30000,
+                  # past the list depth limit the markers stay text
+                  re.compile(r"^(<\w+>\n?)+(- )*x(</\w+>\n)+$")),
+    "empty lines in deeply nested lists in blockquote":
+                 ("> " + "- " * 30000 + "x\n" + ">\n" * 30000,
+                  re.compile(r"^(<\w+>\n?)+(- )*x(</\w+>\n)+$")),
     "emph in deep blockquote":
                  (">" * 100000 + "a*" * 100000,
                   re.compile(r"^(<\w+>\n)+<p>.*</p>\n(</\w+>\n)+$")),
