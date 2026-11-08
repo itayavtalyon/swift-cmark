@@ -708,6 +708,14 @@ static void render_latex(test_batch_runner *runner) {
          "render ordered list start as the counter before it");
   free(latex);
   cmark_node_free(doc);
+
+  static const char email[] = "<a@b.c>\n";
+  doc = cmark_parse_document(email, sizeof(email) - 1, CMARK_OPT_DEFAULT);
+  latex = cmark_render_latex(doc, CMARK_OPT_DEFAULT, 0);
+  STR_EQ(runner, latex, "\\href{mailto:a@b.c}{\\nolinkurl{a@b.c}}\n",
+         "render an email autolink as href with nolinkurl text");
+  free(latex);
+  cmark_node_free(doc);
 }
 
 static void render_commonmark(test_batch_runner *runner) {
