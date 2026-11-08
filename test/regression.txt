@@ -542,3 +542,11 @@ An HTML declaration block may start with a lowercase letter (CommonMark 0.30, #6
 .
 <!docType html>
 ````````````````````````````````
+
+An inline declaration needs no space after its name (commonmark/cmark#456):
+
+```````````````````````````````` example
+x <!A>
+.
+<p>x <!A></p>
+````````````````````````````````
