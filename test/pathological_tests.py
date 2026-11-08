@@ -36,6 +36,9 @@ allowed_failures = {"many references": True}
 # list of pairs consisting of input and a regex that must match the output.
 pathological = {
     # note - some pythons have limit of 65535 for {num-matches} in re.
+    "strong inside strong":
+                 ("_" * 100000 + "." + "_" * 100000,
+                  re.compile(r"^<p>(<strong>){50000}\.(</strong>){50000}</p>\n$")),
     "nested strong emph":
                 (("*a **a " * 65000) + "b" + (" a** a*" * 65000),
                  re.compile("(<em>a <strong>a ){65000}b( a</strong> a</em>){65000}")),
