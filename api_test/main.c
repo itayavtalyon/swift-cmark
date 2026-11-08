@@ -505,6 +505,13 @@ static void test_content(test_batch_runner *runner, cmark_node_type type,
 static void parser(test_batch_runner *runner) {
   test_md_to_html(runner, "No newline", "<p>No newline</p>\n",
                   "document without trailing newline");
+  test_md_to_html(runner, "[a](b\x01" "c)\n[a](d\x7f)\n[a](<e\x01" "f>)",
+                  "<p>[a](b\x01" "c)\n[a](d\x7f)\n"
+                  "<a href=\"e%01f\">a</a></p>\n",
+                  "a bare link destination has no control characters");
+  test_md_to_html(runner, "[a]: b\x01" "c\n\n[a]\n",
+                  "<p>[a]: b\x01" "c</p>\n<p>[a]</p>\n",
+                  "a link reference destination has no control characters");
 
   static const char invalid[] = "<http://a\xff" "b>";
   char *html = cmark_markdown_to_html(invalid, sizeof(invalid) - 1,
