@@ -505,6 +505,14 @@ static void test_content(test_batch_runner *runner, cmark_node_type type,
 static void parser(test_batch_runner *runner) {
   test_md_to_html(runner, "No newline", "<p>No newline</p>\n",
                   "document without trailing newline");
+
+  static const char invalid[] = "<http://a\xff" "b>";
+  char *html = cmark_markdown_to_html(invalid, sizeof(invalid) - 1,
+                                      CMARK_OPT_DEFAULT);
+  STR_EQ(runner, html,
+         "<p><a href=\"http://a%FFb\">http://a\xff" "b</a></p>\n",
+         "scanners match bytes, not UTF-8 sequences");
+  free(html);
 }
 
 static void render_html(test_batch_runner *runner) {

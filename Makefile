@@ -129,8 +129,8 @@ $(SRCDIR)/scanners.c: $(SRCDIR)/scanners.re
 		false; \
 		;; \
 	esac
-	re2c -W -Werror --case-insensitive -b -i --no-generation-date -8 \
-		--encoding-policy substitute -o $@ $<
+	re2c -W -Werror --case-insensitive -b -i --no-generation-date \
+		-o $@ $<
 	$(CLANG_FORMAT) $@
 
 # We include scanners.c in the repository, so this shouldn't
