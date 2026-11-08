@@ -534,3 +534,11 @@ some other text
 </script></li>
 </ul>
 ````````````````````````````````
+
+An HTML declaration block may start with a lowercase letter (CommonMark 0.30, #620):
+
+```````````````````````````````` example
+<!docType html>
+.
+<!docType html>
+````````````````````````````````
