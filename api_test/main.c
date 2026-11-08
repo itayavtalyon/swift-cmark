@@ -25,6 +25,10 @@ static const int num_node_types = sizeof(node_types) / sizeof(*node_types);
 static void test_md_to_html(test_batch_runner *runner, const char *markdown,
                             const char *expected_html, const char *msg);
 
+static void test_md_to_commonmark(test_batch_runner *runner,
+                                  const char *markdown,
+                                  const char *expected, const char *msg);
+
 static void test_content(test_batch_runner *runner, cmark_node_type type,
                          unsigned int *allowed_content);
 
@@ -702,6 +706,13 @@ static void render_commonmark(test_batch_runner *runner) {
 
   cmark_node_free(text);
   cmark_node_free(doc);
+
+  test_md_to_commonmark(runner, "` `\n", "` `\n",
+                        "a code span of one space keeps its space");
+  test_md_to_commonmark(runner, "`  a`\n", "`  a`\n",
+                        "a code span with a leading space only gets no padding");
+  test_md_to_commonmark(runner, "`  a  `\n", "`  a  `\n",
+                        "a code span with spaces on both sides is padded");
 }
 
 static void render_plaintext(test_batch_runner *runner) {
@@ -933,6 +944,17 @@ static void test_md_to_html(test_batch_runner *runner, const char *markdown,
                                       CMARK_OPT_VALIDATE_UTF8);
   STR_EQ(runner, html, expected_html, msg);
   free(html);
+}
+
+static void test_md_to_commonmark(test_batch_runner *runner,
+                                  const char *markdown,
+                                  const char *expected, const char *msg) {
+  cmark_node *doc = cmark_parse_document(markdown, strlen(markdown),
+                                         CMARK_OPT_DEFAULT);
+  char *commonmark = cmark_render_commonmark(doc, CMARK_OPT_DEFAULT, 0);
+  STR_EQ(runner, commonmark, expected, msg);
+  free(commonmark);
+  cmark_node_free(doc);
 }
 
 static void test_feed_across_line_ending(test_batch_runner *runner) {
