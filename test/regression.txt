@@ -505,3 +505,14 @@ Case fold test (Unicode 17 CaseFolding.txt):
 .
 <p><a href="/url">link</a></p>
 ````````````````````````````````
+
+A Unicode symbol counts as punctuation for emphasis flanking (CommonMark 0.31): U+20C1 (Unicode 17) before a closer, U+2427 (Unicode 16) after an opener:
+
+```````````````````````````````` example
+*⃁*a
+
+a*␧*
+.
+<p>*⃁*a</p>
+<p>a*␧*</p>
+````````````````````````````````

@@ -116,6 +116,10 @@ clean:
 $(SRCDIR)/case_fold.inc: $(DATADIR)/CaseFolding.txt
 	python3 tools/make_case_fold_inc.py < $< > $@
 
+# The P and S ranges come from the Unicode data of the Swift toolchain.
+$(SRCDIR)/punct_symbol.inc: tools/make_punct_symbol_inc.swift
+	swift tools/make_punct_symbol_inc.swift > $@
+
 # We include scanners.c in the repository, so this shouldn't
 # normally need to be generated.
 $(SRCDIR)/scanners.c: $(SRCDIR)/scanners.re

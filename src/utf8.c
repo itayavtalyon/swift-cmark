@@ -331,3 +331,23 @@ int cmark_utf8proc_is_punctuation(int32_t uc) {
       uc == 92917 || (uc >= 92983 && uc <= 92987) || uc == 92996 ||
       uc == 113823);
 }
+
+#include "punct_symbol.inc"
+
+static int ps_compare(const void *key, const void *range) {
+  uint32_t c = *(const uint32_t *)key;
+  const uint32_t *r = (const uint32_t *)range;
+
+  return c < r[0] ? -1 : c > r[1] ? 1 : 0;
+}
+
+// matches anything in the P or S classes.
+int cmark_utf8proc_is_punctuation_or_symbol(int32_t uc) {
+  uint32_t key = (uint32_t)uc;
+
+  if (uc < 128) {
+    return cmark_ispunct((char)uc);
+  }
+  return bsearch(&key, ps_ranges, PS_RANGES_SIZE, sizeof(ps_ranges[0]),
+                 ps_compare) != NULL;
+}
