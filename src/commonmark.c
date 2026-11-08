@@ -164,7 +164,7 @@ static int S_render_node(cmark_renderer *renderer, cmark_node *node,
   bool entering = (ev_type == CMARK_EVENT_ENTER);
   const char *info, *code, *title;
   char fencechar[2] = {'\0', '\0'};
-  size_t info_len, code_len;
+  size_t code_len;
   char listmarker[LISTMARKER_SIZE];
   const char *emph_delim;
   bool first_in_list_item;
@@ -210,8 +210,7 @@ static int S_render_node(cmark_renderer *renderer, cmark_node *node,
     break;
 
   case CMARK_NODE_LIST:
-    if (!entering && node->next && (node->next->type == CMARK_NODE_CODE_BLOCK ||
-                                    node->next->type == CMARK_NODE_LIST)) {
+    if (!entering && node->next && (node->next->type == CMARK_NODE_LIST)) {
       // this ensures that a following indented code block or list will be
       // inteprereted correctly.
       CR();
@@ -274,38 +273,26 @@ static int S_render_node(cmark_renderer *renderer, cmark_node *node,
       BLANKLINE();
     }
     info = cmark_node_get_fence_info(node);
-    info_len = strlen(info);
     fencechar[0] = strchr(info, '`') == NULL ? '`' : '~';
     code = cmark_node_get_literal(node);
     code_len = strlen(code);
-    // use indented form if no info, and code doesn't
-    // begin or end with a blank line, and code isn't
-    // first thing in a list item
-    if (info_len == 0 && (code_len > 2 && !cmark_isspace(code[0]) &&
-                          !(cmark_isspace(code[code_len - 1]) &&
-                            cmark_isspace(code[code_len - 2]))) &&
-        !first_in_list_item) {
-      LIT("    ");
-      cmark_strbuf_puts(renderer->prefix, "    ");
-      OUT(cmark_node_get_literal(node), false, LITERAL);
-      cmark_strbuf_truncate(renderer->prefix, renderer->prefix->size - 4);
-    } else {
-      numticks = longest_backtick_sequence(code) + 1;
-      if (numticks < 3) {
-        numticks = 3;
-      }
-      for (i = 0; i < numticks; i++) {
-        LIT(fencechar);
-      }
-      LIT(" ");
-      OUT(info, false, LITERAL);
-      CR();
-      OUT(cmark_node_get_literal(node), false, LITERAL);
-      CR();
-      for (i = 0; i < numticks; i++) {
-        LIT(fencechar);
-      }
+
+    numticks = longest_backtick_sequence(code) + 1;
+    if (numticks < 3) {
+      numticks = 3;
     }
+    for (i = 0; i < numticks; i++) {
+      LIT(fencechar);
+    }
+    LIT(" ");
+    OUT(info, false, LITERAL);
+    CR();
+    OUT(cmark_node_get_literal(node), false, LITERAL);
+    CR();
+    for (i = 0; i < numticks; i++) {
+      LIT(fencechar);
+    }
+
     BLANKLINE();
     break;
 

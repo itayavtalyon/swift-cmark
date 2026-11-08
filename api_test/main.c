@@ -713,6 +713,11 @@ static void render_commonmark(test_batch_runner *runner) {
                         "a code span with a leading space only gets no padding");
   test_md_to_commonmark(runner, "`  a  `\n", "`  a  `\n",
                         "a code span with spaces on both sides is padded");
+  test_md_to_commonmark(runner, "    abc\n", "``` \nabc\n```\n",
+                        "an indented code block renders fenced");
+  test_md_to_commonmark(runner, "- a\n\n<!-- -->\n\n    b\n",
+                        "  - a\n\n<!-- -->\n\n``` \nb\n```\n",
+                        "a list before a code block needs no end marker");
 }
 
 static void render_plaintext(test_batch_runner *runner) {
