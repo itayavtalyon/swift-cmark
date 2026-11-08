@@ -476,3 +476,14 @@ A link destination with unbalanced unescaped parentheses is not a link (commonma
 <p>[a](b(c &quot;t&quot;)</p>
 <p><a href="b(c)d">a</a></p>
 ````````````````````````````````
+
+A numeric character reference has at most 7 decimal or 6 hexadecimal digits, also in a link title (CommonMark 0.29, #487):
+
+```````````````````````````````` example
+&#1234567; &#12345678; &#x10FFFF; &#x0010FFFF;
+
+[a](/u "&#12345678;")
+.
+<p>� &amp;#12345678; 􏿿 &amp;#x0010FFFF;</p>
+<p><a href="/u" title="&amp;#12345678;">a</a></p>
+````````````````````````````````
