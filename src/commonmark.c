@@ -30,6 +30,7 @@ static inline void outc(cmark_renderer *renderer, cmark_node *node,
       renderer->buffer->size > 0 &&
       cmark_isdigit(renderer->buffer->ptr[renderer->buffer->size - 1]);
   char encoded[ENCODED_SIZE];
+  int options = renderer->options;
 
   needs_escaping =
       c < 0x80 && escape != LITERAL &&
@@ -39,6 +40,10 @@ static inline void outc(cmark_renderer *renderer, cmark_node *node,
          c == '>' || c == '\\' || c == '`' || c == '~' || c == '!' ||
          (c == '&' && cmark_isalpha(nextc)) || (c == '!' && nextc == '[') ||
          (c == '^' && nextc == '[') ||
+	 ((CMARK_OPT_SMART & options) &&
+	    ((c == '-' && nextc == '-') ||
+	     (c == '.' && nextc == '.') ||
+	     c == '"' || c == '\'')) ||
          (renderer->begin_content && (c == '-' || c == '+' || c == '=') &&
           // begin_content doesn't get set to false til we've passed digits
           // at the beginning of line, so...

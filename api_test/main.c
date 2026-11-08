@@ -718,6 +718,15 @@ static void render_commonmark(test_batch_runner *runner) {
   test_md_to_commonmark(runner, "- a\n\n<!-- -->\n\n    b\n",
                         "  - a\n\n<!-- -->\n\n``` \nb\n```\n",
                         "a list before a code block needs no end marker");
+
+  static const char smart[] = "a\\-\\-b \\.\\.\\. \\\"q\\\" it\\'s\n";
+  cmark_node *smart_doc = cmark_parse_document(smart, sizeof(smart) - 1,
+                                               CMARK_OPT_SMART);
+  commonmark = cmark_render_commonmark(smart_doc, CMARK_OPT_SMART, 0);
+  STR_EQ(runner, commonmark, "a\\--b \\.\\.. \\\"q\\\" it\\'s\n",
+         "smart mode escapes what it would otherwise smarten");
+  free(commonmark);
+  cmark_node_free(smart_doc);
 }
 
 static void render_plaintext(test_batch_runner *runner) {
