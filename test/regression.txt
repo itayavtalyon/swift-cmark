@@ -516,3 +516,21 @@ a*␧*
 <p>*⃁*a</p>
 <p>a*␧*</p>
 ````````````````````````````````
+
+A type 7 HTML block cannot start on a lazy continuation line (commonmark.js#213):
+
+```````````````````````````````` example
+- <script>
+- some text
+some other text
+</script>
+.
+<ul>
+<li>
+<script>
+</li>
+<li>some text
+some other text
+</script></li>
+</ul>
+````````````````````````````````
