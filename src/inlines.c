@@ -683,18 +683,31 @@ static cmark_syntax_extension *get_extension_for_special_char(cmark_parser *pars
   return NULL;
 }
 
+// The row of openers_bottom for a closer. The length mod 3 rule matters only
+// when a delimiter can both open and close, so an emphasis closer that can
+// also open gets rows of its own (commonmark/cmark#383).
+static int openers_bottom_row(delimiter *closer) {
+  int row = closer->length % 3;
+
+  if ((closer->delim_char == '*' || closer->delim_char == '_') &&
+      closer->can_open) {
+    row += 3;
+  }
+  return row;
+}
+
 static void process_emphasis(cmark_parser *parser, subject *subj, bufsize_t stack_bottom) {
   delimiter *candidate;
   delimiter *closer = NULL;
   delimiter *opener;
   delimiter *old_closer;
   bool opener_found;
-  bufsize_t openers_bottom[3][128];
+  bufsize_t openers_bottom[6][128];
   int i;
 
   // initialize openers_bottom:
   memset(&openers_bottom, 0, sizeof(openers_bottom));
-  for (i=0; i < 3; i++) {
+  for (i=0; i < 6; i++) {
     openers_bottom[i]['*'] = stack_bottom;
     openers_bottom[i]['_'] = stack_bottom;
     openers_bottom[i]['\''] = stack_bottom;
@@ -716,7 +729,7 @@ static void process_emphasis(cmark_parser *parser, subject *subj, bufsize_t stac
       opener = closer->previous;
       opener_found = false;
       while (opener != NULL && opener->position >= stack_bottom &&
-             opener->position >= openers_bottom[closer->length % 3][closer->delim_char]) {
+             opener->position >= openers_bottom[openers_bottom_row(closer)][closer->delim_char]) {
         if (opener->can_open && opener->delim_char == closer->delim_char) {
           // interior closer of size 2 can't match opener of size 1
           // or of size 1 can't match 2
@@ -763,7 +776,7 @@ static void process_emphasis(cmark_parser *parser, subject *subj, bufsize_t stac
       }
       if (!opener_found) {
         // set lower bound for future searches for openers
-        openers_bottom[old_closer->length % 3][old_closer->delim_char] =
+        openers_bottom[openers_bottom_row(old_closer)][old_closer->delim_char] =
                 old_closer->position;
         if (!old_closer->can_open) {
           // we can remove a closer that can't be an

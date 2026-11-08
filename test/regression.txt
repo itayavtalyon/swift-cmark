@@ -576,3 +576,41 @@ b
 <p>b
 <source src="x"></p>
 ````````````````````````````````
+
+A failed match of a closer that can also open does not hide an opener from a later closer (commonmark/cmark#383):
+
+```````````````````````````````` example
+*****Hello*world****
+.
+<p>**<em><strong>Hello<em>world</em></strong></em></p>
+````````````````````````````````
+
+An underscore that is not part of a delimiter should not prevent another
+pair of underscores from forming part of their own. (commonmark/cmark 8bafc33):
+
+```````````````````````````````` example
+__!_!__
+
+__!x!__
+
+**!*!**
+
+---
+
+_*__*_*
+
+_*xx*_*
+
+_*__-_-
+
+_*xx-_-
+.
+<p><strong>!_!</strong></p>
+<p><strong>!x!</strong></p>
+<p><strong>!*!</strong></p>
+<hr />
+<p><em><em>__</em></em>*</p>
+<p><em><em>xx</em></em>*</p>
+<p><em>*__-</em>-</p>
+<p><em>*xx-</em>-</p>
+````````````````````````````````
