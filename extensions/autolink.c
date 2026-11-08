@@ -238,6 +238,10 @@ static cmark_node *url_match(cmark_parser *parser, cmark_node *parent,
   while (rewind < max_rewind && cmark_isalpha(data[-rewind - 1]))
     rewind++;
 
+  // <http://a b> is literal text in GFM (spec example 610), not a URL
+  if (rewind < max_rewind && data[-rewind - 1] == '<')
+    return 0;
+
   if (!sd_autolink_issafe(data - rewind, size + rewind))
     return 0;
 
