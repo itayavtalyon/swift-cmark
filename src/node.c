@@ -103,22 +103,23 @@ bool cmark_node_can_contain_type(cmark_node *node, cmark_node_type child_type) {
 }
 
 static bool S_can_contain(cmark_node *node, cmark_node *child) {
-  if (node == NULL || child == NULL) {
+  if (node == NULL || child == NULL || node == child) {
     return false;
   }
   if (NODE_MEM(node) != NODE_MEM(child)) {
     return 0;
   }
 
-  if (S_safety_checks_enabled()) {
-    // Verify that child is not an ancestor of node or equal to node.
-    cmark_node *cur = node;
-    do {
+  // Verify that child is not an ancestor of node.
+  if (S_safety_checks_enabled() && child->first_child != NULL) {
+    cmark_node *cur = node->parent;
+
+    while (cur != NULL) {
       if (cur == child) {
         return false;
       }
       cur = cur->parent;
-    } while (cur != NULL);
+    }
   }
 
   return cmark_node_can_contain_type(node, (cmark_node_type) child->type);
