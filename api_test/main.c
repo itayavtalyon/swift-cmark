@@ -626,6 +626,29 @@ static void render_man(test_batch_runner *runner) {
          "render document without wrapping");
   free(man);
   cmark_node_free(doc);
+
+  static const char nested[] = "- a\n\n  b\n- c\n  - d\n\n    e\n";
+  doc = cmark_parse_document(nested, sizeof(nested) - 1, CMARK_OPT_DEFAULT);
+  man = cmark_render_man(doc, CMARK_OPT_DEFAULT, 0);
+  STR_EQ(runner, man, ".IP \\[bu] 2\n"
+                      "a\n"
+                      ".RS\n"
+                      ".PP\n"
+                      "b\n"
+                      ".RE\n"
+                      ".IP \\[bu] 2\n"
+                      "c\n"
+                      ".RS\n"
+                      ".IP \\[bu] 2\n"
+                      "d\n"
+                      ".RS\n"
+                      ".PP\n"
+                      "e\n"
+                      ".RE\n"
+                      ".RE\n",
+         "render blocks inside list items indented");
+  free(man);
+  cmark_node_free(doc);
 }
 
 static void render_latex(test_batch_runner *runner) {
