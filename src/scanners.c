@@ -6166,6 +6166,10 @@ bufsize_t _scan_html_declaration(const unsigned char *p) {
       goto yy261;
     if (yych <= 'Z')
       goto yy262;
+    if (yych <= '`')
+      goto yy261;
+    if (yych <= 'z')
+      goto yy262;
   yy261:
     ++p;
     {

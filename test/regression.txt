@@ -550,3 +550,14 @@ x <!A>
 .
 <p>x <!A></p>
 ````````````````````````````````
+
+An inline declaration may start with a lowercase letter (commonmark.js#283):
+
+```````````````````````````````` example
+x<!x>
+
+x<!>
+.
+<p>x<!x></p>
+<p>x&lt;!&gt;</p>
+````````````````````````````````
