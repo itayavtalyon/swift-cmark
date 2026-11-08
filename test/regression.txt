@@ -561,3 +561,18 @@ x<!>
 <p>x<!x></p>
 <p>x&lt;!&gt;</p>
 ````````````````````````````````
+
+search starts a type 6 HTML block, which can interrupt a paragraph; source no longer does (CommonMark 0.31):
+
+```````````````````````````````` example
+a
+<search>
+
+b
+<source src="x">
+.
+<p>a</p>
+<search>
+<p>b
+<source src="x"></p>
+````````````````````````````````
