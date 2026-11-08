@@ -103,7 +103,7 @@ static bool print_document(cmark_node *document, writer_format writer,
     fprintf(stderr, "Unknown format %d\n", writer);
     return false;
   }
-  printf("%s", result);
+  fwrite(result, strlen(result), 1, stdout);
   mem->free(result);
 
   return true;
