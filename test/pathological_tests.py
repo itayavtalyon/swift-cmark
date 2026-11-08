@@ -99,6 +99,9 @@ pathological = {
     "many image openers":
                  ("![p"*100000 + "\n",
                   re.compile("<p>(!\[p){100000}</p>")),
+    "emph in deep blockquote":
+                 (">" * 100000 + "a*" * 100000,
+                  re.compile(r"^(<\w+>\n)+<p>.*</p>\n(</\w+>\n)+$")),
 #    "many references":
 #                 ("".join(map(lambda x: ("[" + str(x) + "]: u\n"), range(1,5000 * 16))) + "[0] " * 5000,
 #                  re.compile("(\[0\] ){4999}")),
