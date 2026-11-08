@@ -630,3 +630,17 @@ x <- 1
 <pre><code class="language-r">x &lt;- 1
 </code></pre>
 ````````````````````````````````
+
+Numeric character references: at most 7 decimal or 6 hexadecimal digits
+```````````````````````````````` example
+&#00000065; &#x0000041; &#0000065; &#x000041;
+.
+<p>&amp;#00000065; &amp;#x0000041; A A</p>
+````````````````````````````````
+
+An entity reference matches a whole entity name, not a prefix or an extension of one
+```````````````````````````````` example
+&am; &ampe; &amp;
+.
+<p>&amp;am; &amp;ampe; &amp;</p>
+````````````````````````````````

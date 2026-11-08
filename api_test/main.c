@@ -796,6 +796,8 @@ static void render_commonmark(test_batch_runner *runner) {
                         "a blank line ends an empty last item before code");
   test_md_to_commonmark(runner, "-\n- a\n", "  - \n  - a\n",
                         "an empty item keeps a tight list tight");
+  test_md_to_commonmark(runner, "-\n\n- a\n", "  - \n\n  - a\n",
+                        "an empty item keeps a loose list loose");
   test_md_to_commonmark(runner, "- a\n  - b\n  -\n\n  c\n",
                         "  - a\n    \n      - b\n      - \n    c\n",
                         "an empty item leaves its parent's prefix alone");
@@ -1116,6 +1118,26 @@ static void test_pathological_regressions(test_batch_runner *runner) {
 
     OK(runner, TIMING < 1000, "takes less than 1000ms to run");
   }
+}
+
+static void source_pos_closer_left_over(test_batch_runner *runner) {
+  static const char markdown[] = "*a**\n";
+  cmark_node *doc =
+      cmark_parse_document(markdown, sizeof(markdown) - 1, CMARK_OPT_DEFAULT);
+  char *xml = cmark_render_xml(doc, CMARK_OPT_DEFAULT | CMARK_OPT_SOURCEPOS);
+  STR_EQ(runner, xml, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                      "<!DOCTYPE document SYSTEM \"CommonMark.dtd\">\n"
+                      "<document sourcepos=\"1:1-1:4\" xmlns=\"http://commonmark.org/xml/1.0\">\n"
+                      "  <paragraph sourcepos=\"1:1-1:4\">\n"
+                      "    <emph sourcepos=\"1:1-1:3\">\n"
+                      "      <text sourcepos=\"1:2-1:2\" xml:space=\"preserve\">a</text>\n"
+                      "    </emph>\n"
+                      "    <text sourcepos=\"1:4-1:4\" xml:space=\"preserve\">*</text>\n"
+                      "  </paragraph>\n"
+                      "</document>\n",
+         "sourcepos of a closer with delimiters left over");
+  free(xml);
+  cmark_node_free(doc);
 }
 
 static void source_pos(test_batch_runner *runner) {
@@ -1725,6 +1747,7 @@ int main() {
   test_feed_across_line_ending(runner);
   test_pathological_regressions(runner);
   source_pos(runner);
+  source_pos_closer_left_over(runner);
   source_pos_inlines(runner);
   ref_source_pos(runner);
   inline_only_opt(runner);
