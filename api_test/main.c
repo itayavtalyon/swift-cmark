@@ -802,6 +802,13 @@ static void render_commonmark(test_batch_runner *runner) {
                         "  - a\n    \n      - b\n      - \n    c\n",
                         "an empty item leaves its parent's prefix alone");
 
+  cmark_node *detached_item = cmark_node_new(CMARK_NODE_ITEM);
+  commonmark = cmark_render_commonmark(detached_item, CMARK_OPT_DEFAULT, 0);
+  STR_EQ(runner, commonmark, "0.  \n",
+         "an empty item with no list renders");
+  free(commonmark);
+  cmark_node_free(detached_item);
+
   static const char smart[] = "a\\-\\-b \\.\\.\\. \\\"q\\\" it\\'s\n";
   cmark_node *smart_doc = cmark_parse_document(smart, sizeof(smart) - 1,
                                                CMARK_OPT_SMART);

@@ -249,7 +249,7 @@ static int S_render_node(cmark_renderer *renderer, cmark_node *node,
       }
       if (node->first_child == NULL) {
         // a blank line after an empty item would loosen a tight list
-        if (node->parent->as.list.tight) {
+        if (cmark_node_get_list_tight(node->parent)) {
           CR();
         } else {
           BLANKLINE();
